@@ -1,0 +1,63 @@
+// 声明 protobuf 版本
+syntax = "proto3";
+
+// 声明代码所在的包(C++ 中的 namespace)
+package fixbug;
+
+// 定义该选项，表示生成 service 服务类和 rpc 方法描述，默认不生成！
+option cc_generic_services = true;
+
+
+// 不管是 message 还是 service，都是生成一个类
+// 其中 message 继承自: public ::google::protobuf::Message
+// service 继承自: public ::google::protobuf::Service
+
+// 定义登录消息类型：包含的数据类型(protobuf中的类型)、字段
+message LoginRequest {
+  // 代表 LoginRequest 的第 1 个字段
+  bytes name = 1; // 字符串一般都定义成 bytes 类型
+  bytes pwd = 2;
+  map<int32, string> test = 3;  // 定义一个映射表
+}
+
+// 把响应数据封装成一个消息
+message ResultCode {
+  int32 errcode = 1;
+  bytes errmsg = 2;
+}
+
+// 定义登录相应消息类型
+message LoginResponse {
+  ResultCode result = 1;  // 注意 protobuf 中定义的消息对象在cpp文件中如何操作 (mutable)
+  bool success = 2;
+}
+
+message GetFriendListsRequest {
+  uint32 userid = 1;
+}
+
+// 定义用户
+message User {
+  bytes name = 1;
+  uint32 age = 2;
+  // 在 User 中定义一个枚举类型
+  enum Sex {
+    MAN = 0;
+    WOMAN = 1;
+  }
+  Sex sex = 3;  // 定义了一个枚举类型对象
+}
+
+// 定义存储了一个列表的消息
+message GetFriendListsResponse {
+  ResultCode result = 1;
+  repeated User friend_list = 2;  // 定义了一个列表类型对象
+}
+
+// 在 protobuf 中定义 rpc 方法的类型 --- service
+// 定义 service 时必须设置选项 cc_generic_services)
+service UserServiceRpc {
+  rpc Login(LoginRequest) returns(LoginResponse);
+  rpc GetFriendLists(GetFriendListsRequest) returns(GetFriendListsResponse);
+}
+
