@@ -39,7 +39,7 @@ public:
     code->set_errmsg("");
     response->set_success(loginResult);
 
-    // 执行回调操作：相应消息的序列化和网络发送(都由框架完成)
+    // 执行回调操作：响应消息 response 的序列化和网络发送(都由框架完成)
     done->Run();
   }
 
