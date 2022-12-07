@@ -19,6 +19,18 @@ message LoginResponse {
   bool success = 2;
 }
 
+message RegistRequest {
+  uint32 id = 1;
+  bytes name = 2;
+  bytes pwd = 3;
+}
+
+message RegistResponse {
+  ResultCode result = 1;
+  bool success = 2;
+}
+
 service UserServiceRpc {
   rpc Login(LoginRequest) returns(LoginResponse);
+  rpc Register(RegistRequest) returns(RegistResponse);
 }

@@ -2,6 +2,8 @@
 #define MPRPC_APPLICATION_H
 
 #include "mprpcconfig.h"
+#include "mprpcchannel.h"
+#include "mprpccontroller.h"
 
 // mprpc 框架基础类，类对象只需要实例化一次，故设计为单例
 class MprpcApplication {

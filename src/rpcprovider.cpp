@@ -1,3 +1,4 @@
+#include "logger.h"
 #include "rpcprovider.h"
 #include "mprpcapplication.h"
 #include "rpcheader.pb.h"
@@ -13,7 +14,7 @@ void RpcProvider::NotifyService(::google::protobuf::Service *service) {
   const ::google::protobuf::ServiceDescriptor *pServiceDesc = service->GetDescriptor();
   // 获取服务的名字
   std::string serviceName = pServiceDesc->name();
-  // std::cout << "serviceName: " << serviceName << '\n';
+  LOG_INFO("serviceName: %s", serviceName.c_str());
   // 获取服务对象 service 方法的数量
   int methodCnt = pServiceDesc->method_count();
   for (int i = 0; i < methodCnt; ++i) {
@@ -22,7 +23,7 @@ void RpcProvider::NotifyService(::google::protobuf::Service *service) {
     std::string methodName = pMethodDesc->name();
     // 记录方法名和方法的描述信息
     serveceInfo.methodMap_.emplace(methodName, pMethodDesc);
-    // std::cout << "methodName: " << methodName << '\n';
+    LOG_INFO("methodName: %s", methodName.c_str());
   }
   // 记录服务
   serveceInfo.service_ = service;
@@ -61,29 +62,29 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     paramSize = rpcHeader.paramsize();
   } else {
     // 数据反序列化失败
-    std::cout << "parse rpc_header_str data error!\n";
+    LOG_ERROR("parse rpc_header_str data error!");
     return;
   }
   std::string paramStr = recvBuf.substr(headerSize + 4, paramSize);
 
-  std::cout << "================================\n";
-  std::cout << "headerSize: " << headerSize << '\n';
-  std::cout << "rpcHeaderStr: " << rpcHeaderStr << '\n';
-  std::cout << "serviceName: " << serviceName << '\n';
-  std::cout << "methodName: " << methodName << '\n';
-  std::cout << "paramSize: " << paramSize << '\n';
-  std::cout << "paramStr: " << paramStr << '\n';
-  std::cout << "================================\n";
+  // std::cout << "================================\n";
+  // std::cout << "headerSize: " << headerSize << '\n';
+  // std::cout << "rpcHeaderStr: " << rpcHeaderStr << '\n';
+  // std::cout << "serviceName: " << serviceName << '\n';
+  // std::cout << "methodName: " << methodName << '\n';
+  // std::cout << "paramSize: " << paramSize << '\n';
+  // std::cout << "paramStr: " << paramStr << '\n';
+  // std::cout << "================================\n";
 
   // 获取 service 对象和 message 对象
   auto it = serviceMap_.find(serviceName);
   if (it == serviceMap_.end()) {
-    std::cout << "serviceName doesn't exist!\n";
+    LOG_ERROR("serviceName doesn't exist!");
     return;
   }
   auto itMd = it->second.methodMap_.find(methodName);
   if (itMd == it->second.methodMap_.end()) {
-    std::cout << serviceName << " doesn't have method " << methodName << "!\n";
+    LOG_ERROR("%s doesn't have method %s!", serviceName.c_str(), methodName.c_str());
     return;
   }
   ::google::protobuf::Service *service = it->second.service_;   // 获取 service 对象
@@ -92,7 +93,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
   // 生成 rpc 方法调用的请求 request 和 响应 response 参数
   ::google::protobuf::Message *request = service->GetRequestPrototype(method).New();
   if (!request->ParseFromString(paramStr)) {
-    std::cout << "request parse error!\n" << paramStr << '\n';
+    LOG_ERROR("request parse error! param: %s", paramStr.c_str());
     return;
   }
   // response 响应类型，由业务来填
@@ -138,7 +139,7 @@ void RpcProvider::sendRpcResponse(const muduo::net::TcpConnectionPtr &conn, ::go
     // 序列化成功，通过网络将 rpc 方法执行的结果返回给 rpc 方法的调用方
     conn->send(responseStr);
   } else {
-    std::cout << "serialize responseStr error!\n";
+    LOG_ERROR("serialize responseStr error!");
   }
   conn->shutdown(); // 模拟 http 的短连接服务，由 rpcProvider 主动断开连接
 }

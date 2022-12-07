@@ -55,7 +55,7 @@ void MprpcApplication::Init(int argc, char **argv) {
   }
   // 加载配置文件
   config_.LoadConfigFile(configFile.c_str());
-  //#define TEST
+  // #define TEST
   #ifdef TEST
   std::cout << "rpcserverip: " << config_.Load("rpcserverip") << '\n';
   std::cout << "rpcserverport: " << config_.Load("rpcserverport") << '\n';

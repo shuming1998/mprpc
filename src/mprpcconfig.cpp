@@ -13,7 +13,7 @@ void MprpcConfig::LoadConfigFile(const char *configFile) {
   while (!feof(pf)) {
     char buf[512] = {0};
     fgets(buf, 512, pf);
-    std::string formatStr = buf;
+    std::string formatStr(buf);
     // 处理配置行三种情况：1注释|2空格|3换行符
     formatStr = formatConfig(formatStr);
     // 跳过注释行和空行
@@ -52,24 +52,31 @@ std::string MprpcConfig::formatConfig(std::string &str) {
     }
     format[id++] = str[i];
   }
+
   std::string formatStr(format);
   id = formatStr.find_first_of(' ');
   if (id != -1) {
     formatStr = formatStr.substr(0, id);
   }
 
-  // 去除当前行最后的换行符
-  // id = formatStr.find('\n');
-  // if (id != -1) {
-  //   formatStr = formatStr.substr(0, id);
-  // }
+  id = formatStr.find_first_of('\0');
+  if (id != -1) {
+    formatStr = formatStr.substr(0, id);
+  }
 
-  // 忽略有效行后面的注释: rpcserverip=127.0.0.1#rpc节点的ip地址\n
+  // 去除当前行最后的换行符
+  id = formatStr.find('\n');
+  if (id != -1) {
+    formatStr = formatStr.substr(0, id);
+  }
+
+  // 忽略有效行后面的注释: rpcserverip=127.0.0.1#rpc节点的ip地址
   id = formatStr.find_first_of('#');
-  if (-1 != id) {
+  if (-1 != id && 0 != id) {
     // 截取不包含注释的有效行
     formatStr = formatStr.substr(0, id);
   }
+
   return formatStr;
 }
 

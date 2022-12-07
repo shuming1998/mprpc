@@ -9,10 +9,16 @@
 // fixbug::UserServiceRpc 使用在 rpc 发布端(即rpc服务的提供者)
 class UserService : public fixbug::UserServiceRpc {
 public:
-  // 这是一个本地方法
+  // 本地方法
   bool Login(std::string name, std::string pwd) {
     std::cout << "Local service: Login" << '\n';
     std::cout << "name: " << name << " pwd: " << pwd << '\n';
+    return true;
+  }
+
+  bool Register(uint32_t id, std::string name, std::string pwd) {
+    std::cout << "Local service: Register" << '\n';
+    std::cout << "id: " << id << "name: " << name << " pwd: " << pwd << '\n';
     return true;
   }
 
@@ -40,6 +46,23 @@ public:
     response->set_success(loginResult);
 
     // 执行回调操作：响应消息 response 的序列化和网络发送(都由框架完成)
+    done->Run();
+  }
+
+  void Register(::google::protobuf::RpcController* controller,
+                const ::fixbug::RegistRequest* request,
+                ::fixbug::RegistResponse* response,
+                ::google::protobuf::Closure* done) {
+    uint32_t id = request->id();
+    std::string name = request->name();
+    std::string pwd = request->pwd();
+
+    bool ret = Register(id, name, pwd);
+
+    response->mutable_result()->set_errcode(0);
+    response->mutable_result()->set_errmsg("");
+    response->set_success(ret);
+
     done->Run();
   }
 
