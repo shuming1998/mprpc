@@ -1,5 +1,5 @@
-#ifndef RPC_PROVIDER_H
-#define RPC_PROVIDER_H
+#ifndef MPRPC_PROVIDER_H
+#define MPRPC_PROVIDER_H
 #include <string>
 #include <thread>
 #include <iostream>
@@ -15,7 +15,7 @@
 #include <google/protobuf/descriptor.h>
 
 // 框架提供的专用于发布 rpc 网络服务的对象类
-class RpcProvider {
+class MprpcProvider {
 public:
   // 该方法是框架提供给外部使用的，是用来发布 rpc 方法的接口，应当能接收任何一个 rpc 服务类，而 protobuf
   // 中生成的类都是从 google::protobuf::Service 继承而来，所以参数类型应为 Service 指针

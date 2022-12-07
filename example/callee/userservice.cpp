@@ -2,7 +2,7 @@
 #include <string>
 
 #include "user.pb.h"
-#include "rpcprovider.h"
+#include "mprpcprovider.h"
 #include "mprpcapplication.h"
 
 // 本地服务，在当前进程中提供两个方法: Login、GetFriendLists
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
   // 首先调用框架的初始化操作
   MprpcApplication::Init(argc, argv);
   // provider 是一个 rpc 网络服务对象，把 UserService 对象发布到 rpc 节点上
-  RpcProvider provider;
+  MprpcProvider provider;
   provider.NotifyService(new UserService());
   // 启动一个 rpc 服务发布节点，进程进入阻塞状态，等待 rpc 方法被请求调用
   provider.Run();

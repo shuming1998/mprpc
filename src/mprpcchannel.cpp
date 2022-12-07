@@ -10,6 +10,7 @@
 #include "mprpcchannel.h"
 #include "rpcheader.pb.h"
 #include "mprpcapplication.h"
+#include "zookeeperutils.h"
 
 /*
  * 所有rpc caller 通过 stub 对象调用的 rpc 方法都会走向这个方法，在这里做|数据的序列化|和|网络发送|
@@ -76,8 +77,25 @@ void MprpcChannel::CallMethod(const ::google::protobuf::MethodDescriptor *method
   }
 
   // 获取配置文件中的 ip 和端口号初始化结构体
-  std::string ip = MprpcApplication::getInstance().GetConfig().Load("rpcserverip");
-  uint16_t port = atoi(MprpcApplication::getInstance().GetConfig().Load("rpcserverport").c_str());
+  // std::string ip = MprpcApplication::getInstance().GetConfig().Load("rpcserverip");
+  // uint16_t port = atoi(MprpcApplication::getInstance().GetConfig().Load("rpcserverport").c_str());
+
+  // rpc 请求方从 zk 上查询需要调用的服务的 host 信息
+  ZkClient zkCli;
+  zkCli.Start();
+  std::string methodPath = "/" + serviceName + "/" + methodName;
+  std::string hostData = zkCli.GetData(methodPath.c_str());
+  if (hostData == "") {
+    controller->SetFailed(methodPath + " doesn't exist!");
+    return;
+  }
+  int idx = hostData.find(":");
+  if (-1 == idx) {
+    controller->SetFailed(methodPath + " address invalid!");
+    return;
+  }
+  std::string ip = hostData.substr(0, idx);
+  uint16_t port = atoi(hostData.substr(idx + 1, hostData.size() - idx).c_str());
 
   sockaddr_in server_addr;
   server_addr.sin_family = AF_INET;
