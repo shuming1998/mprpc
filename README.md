@@ -52,11 +52,6 @@
    ```
 
 
-**rpc服务调用过程**
-![image-20230218012019296](https://github.com/shuming1998/mprpc/blob/main/image/mprpc.png)
-
-
-
 **mprpc 编译和测试**
 
 ```shell
@@ -71,3 +66,6 @@ $ ./provider -i ../example/example.conf # rpc 服务提供方
 $ ./consumer -i ../example/example.conf # rpc 服务调用方
 ```
 
+
+**rpc服务调用过程**
+![image-20230218012019296](https://github.com/shuming1998/mprpc/blob/main/image/mprpc.png)
