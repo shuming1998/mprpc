@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.15)
 project(mprpc)
 
 # set(CMAKE_CXX_FLAGS "$ {CMAKE_CXX_FLAGS} -fPIC")
@@ -11,6 +11,8 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include/moduo)
 
 link_directories(${PROJECT_SOURCE_DIR}/lib)
+link_directories(${PROJECT_SOURCE_DIR}/thirdparty)
 
 add_subdirectory(src)
 add_subdirectory(example)
+

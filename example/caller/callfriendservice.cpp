@@ -7,8 +7,7 @@ int main(int argc, char **argv) {
   // 服务调用，一定需要先调用框架的初始化函数(只初始化一次)
   MprpcApplication::Init(argc, argv);
 
-  // 调用远程发布的 rpc 方法，必须传入一个 ::google::protobuf::RpcChannel*
-  // 来构造代理对象
+  // 调用远程发布的 rpc 方法，必须传入一个 ::google::protobuf::RpcChannel* 来构造代理对象
   fixbug::FriendServiceRpc_Stub stub(new MprpcChannel());
   // 调用 rpc 方法，实际上是调用 RpcChannel::callMethod，集中来做 rpc
   // 方法的参数序列化和网络发送 初始化 rpc 方法的请求参数

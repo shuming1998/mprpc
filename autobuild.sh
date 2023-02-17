@@ -9,4 +9,8 @@ fi
 rm -rf `pwd`/build/*
 cd `pwd`/build &&
 	cmake .. &&
-	make -j16
+	make -j32
+	
+cd ..
+
+

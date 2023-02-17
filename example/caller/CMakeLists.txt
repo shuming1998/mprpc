@@ -1,4 +1,3 @@
-# set(SRC userservice.cpp ../user.pb.cc)
 set(SRC callfriendservice.cpp ../friend.pb.cc)
 
 add_executable(consumer ${SRC})
