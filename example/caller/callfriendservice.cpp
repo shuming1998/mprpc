@@ -1,8 +1,13 @@
 #include "friend.pb.h"
+#include "logger.h"
 #include "mprpcapplication.h"
 #include <iostream>
 
 int main(int argc, char **argv) {
+  LOG_DEBUG("this is a debug!");
+  LOG_INFO("this is a info!");
+  LOG_ERROR("this is a error!");
+  LOG_FATAL("this is a fatal!");
   // 整个程序启动以后，想使用框架享受 rpc
   // 服务调用，一定需要先调用框架的初始化函数(只初始化一次)
   MprpcApplication::Init(argc, argv);

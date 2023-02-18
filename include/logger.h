@@ -6,6 +6,15 @@
 
 #include "lockqueue.h"
 
+#define LOG_DEBUG(logmsgformat, ...)\
+  do {\
+    Logger &logger = Logger::getInstance();\
+    logger.setLogLevel(DEBUG);\
+    char c[1024] = {0};\
+    snprintf(c, sizeof(c), logmsgformat, ##__VA_ARGS__);\
+    logger.Log(c);\
+  } while (0);
+
 #define LOG_INFO(logmsgformat, ...)\
   do {\
     Logger &logger = Logger::getInstance();\
@@ -24,9 +33,20 @@
     logger.Log(c);\
   } while (0);
 
+#define LOG_FATAL(logmsgformat, ...)\
+  do {\
+    Logger &logger = Logger::getInstance();\
+    logger.setLogLevel(FATAL);\
+    char c[1024] = {0};\
+    snprintf(c, sizeof(c), logmsgformat, ##__VA_ARGS__);\
+    logger.Log(c);\
+  } while (0);
+
 enum LogLevel {
+  DEBUG,
   INFO,
   ERROR,
+  FATAL,
 };
 
 // rpc 框架日志系统

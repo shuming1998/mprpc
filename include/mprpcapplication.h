@@ -15,7 +15,6 @@ public:
 
   static MprpcConfig &GetConfig();
 
-
 private:
   MprpcApplication() {}
   MprpcApplication(const MprpcApplication &) = delete;

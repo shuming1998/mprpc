@@ -18,13 +18,9 @@ public:
   // 根据参数指定的 znode 节点路径回去节点中存储的值
   std::string GetData(const char *path);
 
-
-
 private:
   // zk 的客户端句柄
   zhandle_t *zhandle_;
-
-
 };
 
 #endif

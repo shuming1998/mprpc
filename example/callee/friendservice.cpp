@@ -36,8 +36,10 @@ public:
 };
 
 int main(int argc, char **argv) {
-  LOG_INFO("this is a info");
-  LOG_ERROR("this is a error");
+  LOG_DEBUG("this is a debug!");
+  LOG_INFO("this is a info!");
+  LOG_ERROR("this is a error!");
+  LOG_FATAL("this is a fatal!");
   // 调用框架的初始化操作
   MprpcApplication::Init(argc, argv);
 

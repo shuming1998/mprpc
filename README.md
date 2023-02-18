@@ -55,8 +55,6 @@
 
 
 
-
-
 **mprpc 编译和测试**
 
 ```shell
@@ -71,6 +69,23 @@ $ cd bin
 $ ./provider -i ../example/example.conf
 # rpc 服务调用方
 $ ./consumer -i ../example/example.conf 
+```
+
+
+
+**使用异步日志**
+
+日志文件命名格式: year-month-day-log.txt
+
+```c++
+#include "logger.h"
+int a = 10l
+std::string log = "hello, world!";
+
+LOG_DEBUG("mprpc log debug: %d, %s", a, log);
+LOG_INFO("mprpc log info: %d, %s", a, log);
+LOG_ERROR("mprpc log error: %d, %s", a, log);
+LOG_FATAL("mprpc log fatal: %d, %s", a, log);
 ```
 
 
