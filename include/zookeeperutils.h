@@ -15,7 +15,7 @@ public:
   void Start();
   // 在 zkserver 上根据指定的 path 创建 znode 节点，这里默认 state = 0 为永久性节点
   void Create(const char *path, const char *data, int dataLen, int state = 0);
-  // 根据参数指定的 znode 节点路径回去节点中存储的值
+  // 根据参数指定的 znode 节点路径返回该节点中存储的值
   std::string GetData(const char *path);
 
 private:

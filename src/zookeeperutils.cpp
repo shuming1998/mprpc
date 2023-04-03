@@ -4,7 +4,7 @@
 
 // watcher 观察器，zkserver 给 zkclient 的通知
 void global_watcher(zhandle_t *zh, int type, int state, const char *path, void *watcherCtx) {
-  // 回调的消息类型，和会话相关(连接、断开连接、超时等)
+  // 回调的消息类型，ZOO_SESSION_EVENT 代表和会话相关(连接、断开连接、超时等)
   if (type == ZOO_SESSION_EVENT) {
     // zkclient 和 zkserver 连接成功
     if (state == ZOO_CONNECTED_STATE) {
@@ -37,6 +37,8 @@ void ZkClient::Start() {
   */
 
   // zookeeper_init 是一个异步连接方法，正确返回仅代表创建句柄成功，连接 zkserver 会话是否成功未知
+  // zookeeper_init 中调用了 pthread_create 创建了一个 网络 I/O 线程 (poll)
+  // 客户端接收到 server 的响应之后，watcher 回调线程调用 watcher
   zhandle_ = zookeeper_init(connStr.c_str(), global_watcher, 30000, nullptr, nullptr, 0);
   if (nullptr == zhandle_) {
     std::cout << "zookeeper_init error!\n";
@@ -49,6 +51,7 @@ void ZkClient::Start() {
   zoo_set_context(zhandle_, &sem);
 
   // 主线程阻塞，等待 zkserver 的回调函数 global_watcher 响应
+  // global_watcher 中确定连接成功之后，通过 sem_post 唤醒该主线程
   sem_wait(&sem);
   std::cout << "zookeeper_init success!\n";
 }

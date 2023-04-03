@@ -92,4 +92,4 @@ LOG_FATAL("mprpc log fatal: %d, %s", a, log);
 
 
 **rpc服务调用过程**
-![image-20230218012019296](https://github.com/shuming1998/mprpc/blob/main/image/mprpc.png)
+![image-20230218012019296](image/mprpc.png)
