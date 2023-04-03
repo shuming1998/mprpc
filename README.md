@@ -29,9 +29,9 @@
    $ git clone git@github.com:protocolbuffers/protobuf.git
    $ cd protobuf
    $ ./autogen.sh               # 自动生成 configure 配置文件
-   $ ./configure                   # 配置编译环境
-   $ make -j32                     # 编译
-   $ sudo make install     # 拷贝头文件，安装库文件
+   $ ./configure                # 配置编译环境
+   $ make -j32                  # 编译
+   $ sudo make install     	 # 拷贝头文件，安装库文件
    $ sudo ldconfig              # 刷新系统可用动态库
    ```
 
@@ -39,10 +39,11 @@
 3. zookeeper (https://github.com/apache/zookeeper)
 
    ```shell
+   $ sudo apt-get install default-jre
    $ git clone git@github.com:apache/zookeeper.git
    $ cd zookeeper/conf
    $ cp zoo_sample.cfg zoo.cfg  # zookeeper 配置文件
-   $ vim zoo.cfg                      # 更改 dataDir=[你的存储路径]
+   $ vim zoo.cfg                # 更改 dataDir=[你的存储路径]
    $ cd ../bin
    $ ./zkServer.sh start        # 启动 zookeeper 服务器
    
