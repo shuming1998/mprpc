@@ -37,7 +37,7 @@ private:
   // 已建立连接用户的读写事件回调；当远程有调用 rpc 服务的请求时，OnMessage 方法就会响应
   void OnMessage(const muduo::net::TcpConnectionPtr &conn,
                  muduo::net::Buffer *buf, muduo::Timestamp tm);
-  // Closure 的回调操作，用于序列化 rpc 的响应和网络发送
+  // Closure 的回调操作，序列化 rpc 方法调用结果的响应消息，然后通过网络发送出去
   void sendRpcResponse(const muduo::net::TcpConnectionPtr &conn, ::google::protobuf::Message *msg);
 };
 

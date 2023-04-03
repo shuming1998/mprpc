@@ -42,7 +42,8 @@ void MprpcProvider::OnConnection(const muduo::net::TcpConnectionPtr &conn) {
 
 // 在框架中，RpcProvider 和 RpcConsumer 应事先协商好双方通信时使用的 protobuf 数据类型
 // 包括：serviceName、methodName、params <==> 定义 proto 的 message 类型，进行数据头的序列化/反序列化
-// header_size(4 bytes) + header_str + params_str
+// 为了解决 TCP 中的粘包问题，需要记录 params_str 的长度，同样记录在 message 数据头中
+// header_size(4 bytes) + header_str + params_str (header_size 记录了数据头的长度 serviceName + methodName + paramSize)
 void MprpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
                             muduo::net::Buffer *buf,
                             muduo::Timestamp tm) {
@@ -51,6 +52,7 @@ void MprpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
   // 从字符流中读取前 4 个字节
   uint32_t headerSize = 0;
   recvBuf.copy((char *)&headerSize, 4, 0);
+
   // 根据 header_size 读取数据头的原始字符流，将其反序列化为 rpc 请求的详细信息
   std::string rpcHeaderStr = recvBuf.substr(4, headerSize);
   mprpc::RpcHeader rpcHeader;
